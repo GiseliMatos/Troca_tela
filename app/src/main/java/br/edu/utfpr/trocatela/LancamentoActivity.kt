@@ -3,17 +3,19 @@ package br.edu.utfpr.trocatela
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class LancamentoActivity : AppCompatActivity() {
 
-    private lateinit var etCod : TextView
-    private lateinit var etQtd : TextView
-    private lateinit var etValor : TextView
+    private lateinit var etCod : EditText
+    private lateinit var etQtd : EditText
+    private lateinit var etValor : EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,5 +39,16 @@ class LancamentoActivity : AppCompatActivity() {
         intent.putExtra("valor", etValor.text.toString())
         startActivity(intent)
     }
-    fun btListarOnClick(view: View) {}
+    fun btListarOnClick(view: View) {
+        val intent = Intent(this, ListarActivity::class.java)
+        getResult.launch(intent)
+    }
+
+    val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ retorno ->
+        if (retorno.resultCode == RESULT_OK){
+            val cod:Int? = retorno.data?.getIntExtra("cod", 0)
+            etCod.setText( cod.toString())
+        }
+    }
+
 }
